@@ -97,12 +97,6 @@ if __name__ == "__main__":
     print("min_trade_size: %f" % min_trade_size)
 
 
-    balances = my_bittrex.get_balances()['result']
-    balances_report = "\nBalances:\n"
-    for balance in balances:
-        if balance["Currency"] in [market_currency, base_currency]:
-            balances_report += "\t%s: %g\n" % (balance["Currency"], balance["Balance"])
-
     """
         Check the order book to calculate a market price
         {
@@ -192,6 +186,13 @@ if __name__ == "__main__":
     report += "sell_rate: %0.8f %s\n" % (sell_rate, base_currency)
     report += "market_rate: %0.8f %s\n" % (market_rate, base_currency)
     report += "TOTAL PROCEEDS: %0.8f %s\n" % (market_rate * Decimal(amount) * Decimal('.9975'), base_currency)
+
+    # Retrieve the balances at the end to reflect this trade's changes
+    balances = my_bittrex.get_balances()['result']
+    balances_report = "\nBalances:\n"
+    for balance in balances:
+        if balance["Currency"] in [market_currency, base_currency]:
+            balances_report += "\t%s: %g\n" % (balance["Currency"], balance["Balance"])
 
     print(report + balances_report)
 
